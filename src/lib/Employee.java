@@ -27,4 +27,28 @@ public class Employee {
 	public EmployeeSalary getEmployeeSalaryInfo() {
 		return employeeSalary;
 	}
+
+	public int calculateAnnualTax() {
+		int monthsWorked = calculateMonthsWorked();
+		boolean isSingle = employeeFamily.hasNoSpouse();
+		int numberOfChildren = employeeFamily.getChildCount();
+		
+		return TaxFunction.calculateTax(
+			employeeSalary.getMonthlySalary(),
+			employeeSalary.getOtherMonthlyIncome(),
+			monthsWorked,
+			employeeSalary.getAnnualDeductible(),
+			isSingle,
+			numberOfChildren
+			);
+    }
+		
+	private int calculateMonthsWorked() {
+		LocalDate now = LocalDate.now();
+    int yearNow = now.getYear();
+    int joinYear = employeeDetail.getYearJoined();
+    int joinMonth = employeeDetail.getMonthJoined();
+
+    return (yearNow == joinYear) ? (now.getMonthValue() - joinMonth) : 12;
+  }
 }
